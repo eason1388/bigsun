@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>大森旅遊｜機場接送 × 台灣旅遊</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --sky1:#0A74C8;--sky2:#1A9FE0;--sky3:#5BC5F5;--cloud:#F0F8FF;--white:#FFFFFF;
+  --bg:#F5FBFF;--sun:#F5A623;--sun2:#E8830A;
+  --text:#0D1B2A;--text2:#2C4A6E;--text3:#5A7A9A;--border:#C5DFF5;
+  --radius:14px;--shadow:0 4px 20px rgba(10,116,200,.12);
+}
+html,body{height:100%;font-family:'Microsoft JhengHei','Segoe UI',sans-serif;background:var(--bg);color:var(--text)}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--white);border-bottom:3px solid var(--sky1);display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:62px;box-shadow:0 2px 16px rgba(10,116,200,.1)}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.3rem;font-weight:900;color:var(--text)}
+.logo-box{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--sky1),var(--sky2));display:flex;align-items:center;justify-content:center;font-size:1.3rem;box-shadow:0 3px 10px rgba(10,116,200,.3)}
+.logo em{color:var(--sky1);font-style:normal}
+.nav-tabs{display:flex;height:62px}
+.nav-tab{display:flex;align-items:center;padding:0 12px;font-size:.8rem;font-weight:700;color:var(--text2);border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;transition:color .15s,border-color .15s}
+.nav-tab:hover{color:var(--sky1)}
+.nav-tab.active{color:var(--sky1);border-bottom-color:var(--sky1)}
+.nav-book{background:linear-gradient(135deg,var(--sky1),var(--sky2));color:#fff;font-weight:800;padding:9px 18px;border-radius:50px;font-size:.85rem;cursor:pointer;border:none;box-shadow:0 3px 12px rgba(10,116,200,.35);transition:transform .15s;white-space:nowrap}
+.nav-book:hover{transform:translateY(-2px)}
+@media(max-width:1100px){.nav-tabs{display:none}.topbar{padding:0 16px}}
+.page{display:none;padding-top:62px;min-height:100vh}
+.page.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{opacity:0}
+.fade-up.visible{animation:fadeUp .55s ease forwards}
+/* HERO */
+.hero{min-height:calc(100vh - 62px);display:flex;align-items:center;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,rgba(10,116,200,.78) 0%,rgba(26,159,224,.6) 50%,rgba(91,197,245,.35) 100%),url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1600&q=80') center/cover no-repeat}
+.hero-content{position:relative;z-index:1;max-width:660px;padding:48px 40px}
+.hero-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 18px;border-radius:50px;background:rgba(255,255,255,.22);border:1.5px solid rgba(255,255,255,.55);color:#fff;font-size:.85rem;font-weight:700;margin-bottom:22px}
+.hero h1{font-size:clamp(2rem,5vw,3.6rem);font-weight:900;color:#fff;line-height:1.15;margin-bottom:18px;text-shadow:0 2px 16px rgba(0,0,0,.25)}
+.hero h1 strong{color:#FFE566}
+.hero p{font-size:1.05rem;color:rgba(255,255,255,.93);line-height:1.8;margin-bottom:32px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-white{display:inline-block;padding:12px 28px;border-radius:50px;background:#fff;color:var(--sky1);font-weight:800;font-size:.92rem;box-shadow:0 4px 16px rgba(0,0,0,.15);transition:transform .15s}
+.btn-white:hover{transform:translateY(-2px)}
+.btn-ghost{display:inline-block;padding:11px 28px;border-radius:50px;border:2px solid rgba(255,255,255,.75);color:#fff;font-weight:700;font-size:.92rem;transition:background .15s}
+.btn-ghost:hover{background:rgba(255,255,255,.18)}
+.hero-stats{display:flex;gap:28px;margin-top:44px;flex-wrap:wrap}
+.hs h3{font-size:1.9rem;font-weight:900;color:#FFE566}
+.hs p{color:rgba(255,255,255,.88);font-size:.8rem;margin-top:1px}
+.hero-wave{position:absolute;bottom:-1px;left:0;right:0;z-index:2;line-height:0}
+.hero-wave svg{display:block;width:100%}
+/* QUICK */
+.quick-section{background:var(--white);padding:44px 32px 52px}
+.quick-section h2{text-align:center;font-size:1.4rem;font-weight:900;color:var(--text);margin-bottom:6px}
+.quick-section p{text-align:center;color:var(--text3);font-size:.9rem;margin-bottom:28px}
+.quick-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:14px;max-width:1050px;margin:0 auto}
+.qc{background:var(--bg);border:2px solid var(--border);border-radius:var(--radius);padding:26px 16px;text-align:center;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s}
+.qc:hover{transform:translateY(-4px);border-color:var(--sky2);box-shadow:0 8px 24px rgba(10,116,200,.14)}
+.qc-icon{font-size:2rem;margin-bottom:10px}
+.qc-title{font-size:.95rem;font-weight:800;color:var(--text);margin-bottom:4px}
+.qc-sub{font-size:.78rem;color:var(--text3)}
+/* PHOTO STRIP */
+.photo-strip{background:var(--cloud);padding:52px 32px}
+.photo-strip-head{text-align:center;margin-bottom:32px}
+.photo-strip-head h2{font-size:1.5rem;font-weight:900;color:var(--text);margin-bottom:6px}
+.photo-strip-head p{color:var(--text3);font-size:.9rem}
+.photo-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;grid-template-rows:220px 220px;gap:12px;max-width:1050px;margin:0 auto}
+.photo-item{border-radius:12px;overflow:hidden;position:relative;cursor:pointer}
+.photo-item.tall{grid-row:1/3}
+.photo-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.photo-item:hover img{transform:scale(1.06)}
+.photo-caption{position:absolute;bottom:0;left:0;right:0;padding:14px 16px;background:linear-gradient(to top,rgba(10,30,60,.8),transparent);color:#fff;font-size:.88rem;font-weight:700}
+.photo-caption small{display:block;font-size:.72rem;font-weight:400;color:rgba(255,255,255,.8);margin-top:1px}
+@media(max-width:700px){.photo-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}.photo-item.tall{grid-row:auto}}
+/* HOME SERVICES */
+.home-services{background:var(--white);padding:52px 32px}
+.hs-inner{max-width:1050px;margin:0 auto}
+.hs-head{text-align:center;margin-bottom:32px}
+.hs-head h2{font-size:1.5rem;font-weight:900;color:var(--text);margin-bottom:6px}
+.hs-head p{color:var(--text3);font-size:.9rem}
+.hs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.hsc{display:flex;align-items:flex-start;gap:14px;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:20px;transition:border-color .2s,box-shadow .2s}
+.hsc:hover{border-color:var(--sky2);box-shadow:var(--shadow)}
+.hsc-icon{width:44px;height:44px;flex-shrink:0;border-radius:10px;background:linear-gradient(135deg,var(--sky1),var(--sky2));display:flex;align-items:center;justify-content:center;font-size:1.25rem}
+.hsc h4{font-size:.95rem;font-weight:800;color:var(--text);margin-bottom:4px}
+.hsc p{font-size:.82rem;color:var(--text2);line-height:1.65}
+/* TESTIMONIALS */
+.home-testimonials{background:var(--cloud);padding:52px 32px}
+.home-testimonials .inner{max-width:1050px;margin:0 auto}
+.section-head{text-align:center;margin-bottom:32px}
+.section-head h2{font-size:1.5rem;font-weight:900;color:var(--text);margin-bottom:6px}
+.section-head p{color:var(--text3);font-size:.9rem}
+.tcard{background:var(--white);border-radius:var(--radius);padding:24px;border:1.5px solid var(--border);box-shadow:var(--shadow)}
+.stars{color:var(--sun);font-size:1rem;margin-bottom:11px;letter-spacing:2px}
+.ttext{font-size:.86rem;color:var(--text2);line-height:1.8;margin-bottom:16px;font-style:italic}
+.tauthor{display:flex;align-items:center;gap:10px}
+.tav{width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid var(--border)}
+.tav img{width:100%;height:100%;object-fit:cover}
+.tname{font-size:.88rem;font-weight:800;color:var(--text)}
+.tinfo{font-size:.74rem;color:var(--text3)}
+/* TRAVEL TIPS */
+.travel-tips{background:var(--white);padding:52px 32px}
+.travel-tips .inner{max-width:1050px;margin:0 auto}
+.tip-card{background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;display:flex;gap:14px;align-items:flex-start;transition:border-color .2s,box-shadow .2s}
+.tip-card:hover{border-color:var(--sky2);box-shadow:var(--shadow)}
+.tip-icon{width:46px;height:46px;border-radius:11px;background:linear-gradient(135deg,var(--sun),var(--sun2));display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.tip-card h4{font-size:.93rem;font-weight:800;color:var(--text);margin-bottom:5px}
+.tip-card p{font-size:.82rem;color:var(--text2);line-height:1.7}
+/* PROMO */
+.promo-banner{background:linear-gradient(135deg,#FF6B35,var(--sun));padding:16px 32px;text-align:center}
+.promo-banner p{color:#fff;font-size:.95rem;font-weight:700}
+.promo-banner strong{font-size:1.05rem}
+.promo-close{background:rgba(255,255,255,.25);border:none;color:#fff;border-radius:50px;padding:4px 14px;cursor:pointer;font-size:.8rem;margin-left:14px;font-weight:700}
+/* HOME CTA */
+.home-cta{background:linear-gradient(135deg,var(--sky1),var(--sky2));padding:52px 32px;text-align:center}
+.home-cta h2{font-size:1.6rem;font-weight:900;color:#fff;margin-bottom:10px}
+.home-cta p{color:rgba(255,255,255,.9);font-size:.95rem;margin-bottom:28px}
+.home-cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-cta-w{display:inline-block;padding:12px 28px;border-radius:50px;background:#fff;color:var(--sky1);font-weight:800;box-shadow:0 3px 14px rgba(0,0,0,.15);transition:transform .15s}
+.btn-cta-w:hover{transform:translateY(-2px)}
+.btn-cta-g{display:inline-block;padding:11px 28px;border-radius:50px;border:2px solid rgba(255,255,255,.8);color:#fff;font-weight:700;transition:background .15s}
+.btn-cta-g:hover{background:rgba(255,255,255,.18)}
+/* SHARED */
+.page-header{padding:44px 32px 40px;text-align:center;background:linear-gradient(135deg,var(--sky1) 0%,var(--sky2) 100%)}
+.page-header h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:900;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.18)}
+.page-header p{color:rgba(255,255,255,.92);margin-top:10px;font-size:.95rem;max-width:540px;margin-left:auto;margin-right:auto;line-height:1.7}
+.content{max-width:1050px;margin:0 auto;padding:44px 24px 60px}
+.label{font-size:.75rem;font-weight:800;color:var(--sky1);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.title{font-size:clamp(1.3rem,3vw,1.9rem);font-weight:900;color:var(--text);margin-bottom:10px}
+.sub{font-size:.9rem;color:var(--text2);line-height:1.75;max-width:580px}
+.divider{height:1px;background:var(--border);margin:40px 0}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:18px}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+/* SERVICE CARDS */
+.svc-card{background:var(--white);border-radius:var(--radius);overflow:hidden;border:1.5px solid var(--border);box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s}
+.svc-card:hover{transform:translateY(-5px);box-shadow:0 12px 32px rgba(10,116,200,.18)}
+.svc-img{height:190px;overflow:hidden}
+.svc-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.svc-card:hover .svc-img img{transform:scale(1.06)}
+.svc-body{padding:20px}
+.svc-icon{width:42px;height:42px;border-radius:10px;margin-bottom:11px;background:linear-gradient(135deg,var(--sky1),var(--sky2));display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.svc-body h3{font-size:1rem;font-weight:800;color:var(--text);margin-bottom:6px}
+.svc-body p{font-size:.85rem;color:var(--text2);line-height:1.75}
+.svc-tag{display:inline-block;margin-top:11px;padding:3px 11px;border-radius:50px;background:#E3F3FD;color:var(--sky1);font-size:.74rem;font-weight:800}
+/* WHY US */
+.why-card{background:var(--white);border-radius:12px;padding:22px;border:1.5px solid var(--border);display:flex;align-items:flex-start;gap:14px;box-shadow:var(--shadow);transition:border-color .2s,transform .2s}
+.why-card:hover{border-color:var(--sky2);transform:translateY(-3px)}
+.why-icon{width:46px;height:46px;flex-shrink:0;border-radius:11px;background:linear-gradient(135deg,var(--sky1),var(--sky2));display:flex;align-items:center;justify-content:center;font-size:1.25rem}
+.why-card h4{font-size:.95rem;font-weight:800;color:var(--text);margin-bottom:4px}
+.why-card p{font-size:.83rem;color:var(--text2);line-height:1.7}
+/* STEPS */
+.steps-wrap{background:linear-gradient(135deg,var(--sky1),var(--sky2));border-radius:var(--radius);padding:36px 28px;margin-top:40px}
+.steps-wrap h3{color:#fff;font-size:1.2rem;font-weight:900;text-align:center;margin-bottom:24px}
+.steps-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.step-box{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);border-radius:12px;padding:22px 16px;text-align:center}
+.step-n{width:44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900;color:var(--sky1);margin:0 auto 12px}
+.step-i{font-size:1.7rem;margin-bottom:8px}
+.step-box h4{font-size:.9rem;font-weight:800;color:#fff;margin-bottom:5px}
+.step-box p{font-size:.8rem;color:rgba(255,255,255,.88);line-height:1.6}
+/* DESTINATIONS */
+.region-head{display:flex;align-items:center;gap:10px;margin:40px 0 20px;padding-bottom:12px;border-bottom:2px solid var(--border)}
+.region-head h2{font-size:1.2rem;font-weight:900;color:var(--text)}
+.rbadge{padding:4px 14px;border-radius:50px;font-size:.78rem;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--sky1),var(--sky2))}
+.rbadge.g{background:linear-gradient(135deg,#2E7D32,#43A047)}
+.rbadge.o{background:linear-gradient(135deg,#E65100,#F57C00)}
+.rbadge.t{background:linear-gradient(135deg,#00695C,#26A69A)}
+.dest-card{background:var(--white);border-radius:var(--radius);overflow:hidden;border:1.5px solid var(--border);box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s}
+.dest-card:hover{transform:translateY(-5px);box-shadow:0 12px 30px rgba(10,116,200,.16)}
+.dest-img{position:relative;overflow:hidden}
+.dest-img img{width:100%;height:200px;object-fit:cover;display:block;transition:transform .4s}
+.dest-card:hover .dest-img img{transform:scale(1.05)}
+.dest-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(5,20,45,.75) 0%,transparent 55%)}
+.dest-lbl{position:absolute;bottom:0;left:0;right:0;padding:14px 16px}
+.dest-tag{display:inline-block;padding:2px 9px;border-radius:50px;background:var(--sky1);color:#fff;font-size:.7rem;font-weight:800;margin-bottom:5px}
+.dest-tag.g{background:#2E7D32}.dest-tag.o{background:#E65100}.dest-tag.t{background:#00695C}
+.dest-name{color:#fff;font-size:1.1rem;font-weight:900}
+.dest-sub{color:rgba(255,255,255,.85);font-size:.76rem;margin-top:1px}
+.dest-body{padding:16px 18px}
+.dest-body p{font-size:.85rem;color:var(--text2);line-height:1.75}
+.dest-kws{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.kw{padding:2px 9px;border-radius:50px;background:#E3F3FD;color:var(--sky1);font-size:.73rem;font-weight:700}
+/* FLEET */
+.fleet-card{background:var(--white);border-radius:var(--radius);overflow:hidden;border:1.5px solid var(--border);box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s}
+.fleet-card:hover{transform:translateY(-5px);box-shadow:0 12px 28px rgba(10,116,200,.16)}
+.fleet-img{height:195px;overflow:hidden;position:relative}
+.fleet-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.fleet-card:hover .fleet-img img{transform:scale(1.05)}
+.fleet-badge{position:absolute;top:12px;left:12px;padding:3px 11px;border-radius:50px;background:linear-gradient(135deg,var(--sky1),var(--sky2));color:#fff;font-size:.73rem;font-weight:800}
+.fleet-body{padding:18px 20px}
+.fleet-body h3{font-size:1rem;font-weight:800;color:var(--text);margin-bottom:6px}
+.fleet-body p{font-size:.84rem;color:var(--text2);line-height:1.7;margin-bottom:12px}
+.fleet-specs{display:flex;gap:12px;flex-wrap:wrap}
+.fspec{font-size:.8rem;color:var(--text2);display:flex;align-items:center;gap:3px}
+/* AIRPORTS */
+.ac{background:var(--white);border-radius:12px;padding:15px 18px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;box-shadow:var(--shadow);transition:border-color .2s}
+.ac:hover{border-color:var(--sky2)}
+.ac-l{display:flex;align-items:center;gap:12px}
+.iata{font-size:1.2rem;font-weight:900;color:var(--sky1);min-width:50px}
+.an{font-size:.92rem;font-weight:700;color:var(--text)}
+.as{font-size:.76rem;color:var(--text3)}
+.ab{padding:3px 12px;border-radius:50px;background:#E3F3FD;color:var(--sky1);font-size:.74rem;font-weight:800}
+/* PRICING */
+.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px}
+.pc-card{background:var(--white);border-radius:var(--radius);padding:30px 24px;border:2px solid var(--border);box-shadow:var(--shadow);position:relative;transition:transform .2s}
+.pc-card:hover{transform:translateY(-4px)}
+.pc-card.pop{border-color:var(--sky1);background:linear-gradient(170deg,rgba(10,116,200,.04),var(--white))}
+.pop-lbl{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--sky1),var(--sky2));color:#fff;padding:4px 18px;border-radius:50px;font-size:.73rem;font-weight:800;white-space:nowrap}
+.pt{font-size:.73rem;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:.09em;margin-bottom:4px}
+.pc-card h3{font-size:1.15rem;font-weight:900;color:var(--text);margin-bottom:16px}
+.pa{display:flex;align-items:baseline;gap:3px;margin-bottom:5px}
+.pcu{font-size:.9rem;font-weight:700;color:var(--sky1);align-self:flex-start;margin-top:7px}
+.pnum{font-size:2.7rem;font-weight:900;color:var(--sky1);line-height:1}
+.punit{font-size:.82rem;color:var(--text3)}
+.pnote{font-size:.78rem;color:var(--text3);margin-bottom:18px}
+.plist{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:24px}
+.plist li{display:flex;align-items:center;gap:8px;font-size:.87rem;color:var(--text2)}
+.plist li::before{content:'✓';color:var(--sky1);font-weight:900;flex-shrink:0}
+.btn-sky{display:block;padding:12px;border-radius:50px;background:linear-gradient(135deg,var(--sky1),var(--sky2));color:#fff;font-weight:800;text-align:center;font-size:.9rem;border:none;cursor:pointer;box-shadow:0 3px 12px rgba(10,116,200,.28);transition:transform .15s}
+.btn-sky:hover{transform:translateY(-2px)}
+.btn-sky-bdr{display:block;padding:11px;border-radius:50px;border:2px solid var(--sky1);color:var(--sky1);font-weight:800;text-align:center;font-size:.9rem;background:var(--white);cursor:pointer;transition:background .15s,color .15s}
+.btn-sky-bdr:hover{background:var(--sky1);color:#fff}
+/* CTA BOX */
+.cta-box{background:linear-gradient(135deg,var(--sky1),var(--sky2));border-radius:var(--radius);padding:36px 28px;text-align:center;margin-top:44px}
+.cta-box h2{font-size:1.4rem;font-weight:900;color:#fff;margin-bottom:9px}
+.cta-box p{color:rgba(255,255,255,.9);font-size:.92rem;margin-bottom:24px}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+/* CONTACT */
+.contact-wrap{display:grid;grid-template-columns:1fr 1.15fr;gap:36px;align-items:start}
+@media(max-width:800px){.contact-wrap{grid-template-columns:1fr}}
+.ci-list{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+.ci-item{display:flex;align-items:flex-start;gap:12px;background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+.ci-icon{width:42px;height:42px;flex-shrink:0;border-radius:10px;background:linear-gradient(135deg,var(--sky1),var(--sky2));display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.ci-item h4{font-size:.88rem;font-weight:800;color:var(--text);margin-bottom:2px}
+.ci-item p,.ci-item a{font-size:.85rem;color:var(--text2)}
+.ci-item a{color:var(--sky1)}
+.form-box{background:var(--white);border-radius:var(--radius);padding:30px;border:1.5px solid var(--border);box-shadow:var(--shadow)}
+.form-box h3{font-size:1.1rem;font-weight:900;color:var(--text);margin-bottom:20px}
+.fg{margin-bottom:13px}
+.fg label{display:block;font-size:.8rem;font-weight:800;color:var(--text);margin-bottom:4px}
+.fg input,.fg select,.fg textarea{width:100%;padding:10px 13px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);color:var(--text);font-size:.87rem;font-family:inherit;outline:none;transition:border-color .15s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--sky1)}
+.fg textarea{resize:vertical;min-height:85px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+@media(max-width:480px){.fr{grid-template-columns:1fr}}
+/* ABOUT */
+.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center;margin:44px 0}
+@media(max-width:700px){.story-grid{grid-template-columns:1fr}}
+.story-img{border-radius:var(--radius);overflow:hidden;box-shadow:0 8px 32px rgba(10,116,200,.15)}
+.story-img img{width:100%;height:300px;object-fit:cover}
+.story-text h2{font-size:1.6rem;font-weight:900;color:var(--text);margin-bottom:14px;margin-top:8px}
+.story-text p{font-size:.9rem;color:var(--text2);line-height:1.85;margin-bottom:12px}
+.timeline{position:relative;padding:8px 0;margin:40px 0}
+.timeline::before{content:'';position:absolute;left:22px;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--sky1),var(--sky3))}
+.tl-item{display:flex;gap:20px;margin-bottom:32px;position:relative}
+.tl-dot{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--sky1),var(--sky2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:.8rem;flex-shrink:0;box-shadow:0 3px 12px rgba(10,116,200,.3);z-index:1}
+.tl-content{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:18px 20px;flex:1;box-shadow:var(--shadow)}
+.tl-year{font-size:.75rem;font-weight:800;color:var(--sky1);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.tl-content h4{font-size:.95rem;font-weight:800;color:var(--text);margin-bottom:5px}
+.tl-content p{font-size:.83rem;color:var(--text2);line-height:1.7}
+.val-card{background:var(--white);border-radius:var(--radius);padding:28px 22px;border:1.5px solid var(--border);box-shadow:var(--shadow);text-align:center;transition:transform .2s,border-color .2s}
+.val-card:hover{transform:translateY(-4px);border-color:var(--sky2)}
+.val-icon{font-size:2.2rem;margin-bottom:12px}
+.val-card h4{font-size:1rem;font-weight:800;color:var(--text);margin-bottom:8px}
+.val-card p{font-size:.84rem;color:var(--text2);line-height:1.75}
+.team-card{background:var(--white);border-radius:var(--radius);padding:24px;border:1.5px solid var(--border);box-shadow:var(--shadow);text-align:center;transition:transform .2s}
+.team-card:hover{transform:translateY(-4px)}
+.team-av{width:72px;height:72px;border-radius:50%;overflow:hidden;margin:0 auto 14px;border:3px solid var(--sky3)}
+.team-av img{width:100%;height:100%;object-fit:cover}
+.team-card h4{font-size:.95rem;font-weight:800;color:var(--text);margin-bottom:3px}
+.team-role{font-size:.78rem;font-weight:700;color:var(--sky1);margin-bottom:8px}
+.team-card p{font-size:.82rem;color:var(--text2);line-height:1.7}
+/* FAQ */
+.faq-list{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+.faq-item{background:var(--white);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;cursor:pointer;font-weight:800;font-size:.93rem;color:var(--text);transition:background .15s;user-select:none}
+.faq-q:hover{background:var(--cloud)}
+.faq-q.open{color:var(--sky1);background:var(--cloud)}
+.faq-arrow{font-size:1rem;transition:transform .25s;color:var(--sky1)}
+.faq-q.open .faq-arrow{transform:rotate(180deg)}
+.faq-a{display:none;padding:4px 20px 18px;font-size:.87rem;color:var(--text2);line-height:1.85;border-top:1px solid var(--border)}
+.faq-a.open{display:block}
+.faq-cat{font-size:.82rem;font-weight:800;color:var(--sky1);text-transform:uppercase;letter-spacing:.08em;margin:32px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--border);display:block}
+/* FOOTER */
+.site-footer{background:#0A1929;color:rgba(255,255,255,.8);padding:52px 32px 0}
+.footer-inner{max-width:1050px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px}
+@media(max-width:900px){.footer-inner{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.footer-inner{grid-template-columns:1fr}}
+.footer-brand .f-logo{display:flex;align-items:center;gap:10px;font-size:1.2rem;font-weight:900;color:#fff;margin-bottom:14px}
+.footer-brand p{font-size:.84rem;line-height:1.8;color:rgba(255,255,255,.6);max-width:260px;margin-bottom:18px}
+.social-links{display:flex;gap:10px}
+.social-btn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:.95rem;cursor:pointer;transition:background .15s}
+.social-btn:hover{background:var(--sky2)}
+.footer-col h4{font-size:.85rem;font-weight:800;color:#fff;margin-bottom:14px;letter-spacing:.04em}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.footer-col ul li{font-size:.82rem;color:rgba(255,255,255,.6);cursor:pointer;transition:color .15s}
+.footer-col ul li:hover{color:var(--sky3)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);margin-top:40px;padding:18px 0;text-align:center;font-size:.78rem;color:rgba(255,255,255,.4)}
+/* MOBILE NAV */
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;background:var(--white);border-top:2px solid var(--sky1)}
+.mn{display:flex;justify-content:space-around}
+.mnb{flex:1;display:flex;flex-direction:column;align-items:center;padding:7px 1px;cursor:pointer;font-size:.58rem;font-weight:700;color:var(--text3);border:none;background:none;transition:color .15s}
+.mnb span{font-size:1.1rem;margin-bottom:1px}
+.mnb.active,.mnb:hover{color:var(--sky1)}
+@media(max-width:1100px){.mobile-nav{display:block};body{padding-bottom:58px}}
+</style>
+</head>
+<body>
+
+<!-- PROMO -->
+<div id="promo" class="promo-banner">
+  <p>🎉 <strong>夏日限定優惠</strong>：7–9月預約旅遊包車，享 85 折優惠！<button class="promo-close" onclick="document.getElementById('promo').style.display='none'">✕ 關閉</button></p>
+</div>
+
+<!-- TOP NAV -->
+<nav class="topbar">
+  <div class="logo"><div class="logo-box">✈</div>大森<em>旅遊</em></div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="go('home')">🏠 首頁</div>
+    <div class="nav-tab" onclick="go('services')">✈ 接送服務</div>
+    <div class="nav-tab" onclick="go('destinations')">🗺 旅遊景點</div>
+    <div class="nav-tab" onclick="go('fleet')">🚗 車隊介紹</div>
+    <div class="nav-tab" onclick="go('pricing')">💰 收費方案</div>
+    <div class="nav-tab" onclick="go('about')">🏢 關於我們</div>
+    <div class="nav-tab" onclick="go('faq')">❓ 常見問題</div>
+    <div class="nav-tab" onclick="go('contact')">📞 聯絡預約</div>
+  </div>
+  <button class="nav-book" onclick="go('contact')">立即預約</button>
+</nav>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-pill">✈ 台灣頂級旅遊接送品牌</div>
+      <h1>藍天出發<br/><strong>大森旅遊</strong><br/>帶您遨遊台灣</h1>
+      <p>專業機場接送 × 全台旅遊包車<br/>讓每一段旅程，都如晴空般輕鬆安心</p>
+      <div class="hero-btns">
+        <a class="btn-white" href="#" onclick="go('contact');return false">✈ 立即預約接送</a>
+        <a class="btn-ghost" href="#" onclick="go('destinations');return false">🗺 探索旅遊景點</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hs"><h3>10,000+</h3><p>成功接送次數</p></div>
+        <div class="hs"><h3>99.8%</h3><p>準時到達率</p></div>
+        <div class="hs"><h3>5 ★</h3><p>客戶好評</p></div>
+        <div class="hs"><h3>24H</h3><p>全天候服務</p></div>
+      </div>
+    </div>
+    <div class="hero-wave"><svg viewBox="0 0 1440 50" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,28 C480,56 960,0 1440,28 L1440,50 L0,50 Z" fill="#F5FBFF"/></svg></div>
+  </div>
+  <div class="quick-section">
+    <h2>大森旅遊，一站搞定</h2>
+    <p>選擇您需要的服務，立即開始規劃</p>
+    <div class="quick-grid">
+      <div class="qc" onclick="go('services')"><div class="qc-icon">🛬</div><div class="qc-title">機場接送</div><div class="qc-sub">接機・送機・來回方案</div></div>
+      <div class="qc" onclick="go('destinations')"><div class="qc-icon">🗺️</div><div class="qc-title">旅遊景點</div><div class="qc-sub">北中南東，全台精選</div></div>
+      <div class="qc" onclick="go('fleet')"><div class="qc-icon">🚗</div><div class="qc-title">車隊介紹</div><div class="qc-sub">豪華廂型車・商務轎車</div></div>
+      <div class="qc" onclick="go('pricing')"><div class="qc-icon">💰</div><div class="qc-title">收費方案</div><div class="qc-sub">透明計費，無隱藏費用</div></div>
+      <div class="qc" onclick="go('about')"><div class="qc-icon">🏢</div><div class="qc-title">關於我們</div><div class="qc-sub">10年品牌・值得信賴</div></div>
+      <div class="qc" onclick="go('contact')"><div class="qc-icon">📞</div><div class="qc-title">聯絡預約</div><div class="qc-sub">24小時隨時服務</div></div>
+    </div>
+  </div>
+  <div class="photo-strip">
+    <div class="photo-strip-head"><h2>📸 精選旅遊美景</h2><p>搭乘大森包車，探索台灣每一個令人驚豔的角落</p></div>
+    <div class="photo-grid">
+      <div class="photo-item tall" onclick="go('destinations')"><img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80" alt="太魯閣"/><div class="photo-caption">太魯閣國家公園<small>花蓮・大理石峽谷</small></div></div>
+      <div class="photo-item" onclick="go('destinations')"><img src="https://images.unsplash.com/photo-1470004914212-05527e49370b?w=600&q=80" alt="九份"/><div class="photo-caption">九份老街<small>新北・山城燈火</small></div></div>
+      <div class="photo-item" onclick="go('destinations')"><img src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=600&q=80" alt="日月潭"/><div class="photo-caption">日月潭<small>南投・高山湖泊</small></div></div>
+      <div class="photo-item" onclick="go('destinations')"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80" alt="清境"/><div class="photo-caption">清境農場<small>南投・台灣小瑞士</small></div></div>
+      <div class="photo-item" onclick="go('destinations')"><img src="https://images.unsplash.com/photo-1500835556837-99ac94a94552?w=600&q=80" alt="墾丁"/><div class="photo-caption">墾丁國家公園<small>屏東・熱帶海灣</small></div></div>
+    </div>
+  </div>
+  <div class="home-services">
+    <div class="hs-inner">
+      <div class="hs-head"><h2>✈ 為什麼選擇大森旅遊</h2><p>10年以上服務經驗，超過一萬次成功接送</p></div>
+      <div class="hs-grid">
+        <div class="hsc fade-up"><div class="hsc-icon">🛡️</div><div><h4>安全有保障</h4><p>司機嚴格審查，車輛定期保養，投保足額商業保險。</p></div></div>
+        <div class="hsc fade-up"><div class="hsc-icon">⏰</div><div><h4>準時率 99.8%</h4><p>即時航班追蹤，提前規劃路線，確保不錯過班機。</p></div></div>
+        <div class="hsc fade-up"><div class="hsc-icon">💬</div><div><h4>24小時客服</h4><p>全天候待命，隨時解答您的任何問題與需求。</p></div></div>
+        <div class="hsc fade-up"><div class="hsc-icon">💳</div><div><h4>透明計費</h4><p>預約即報價，無隱藏費用，讓預算完全在掌握之中。</p></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="home-testimonials">
+    <div class="inner">
+      <div class="section-head"><h2>⭐ 旅客真實好評</h2><p>超過 10,000 次接送，每一位客人都是大森的驕傲</p></div>
+      <div class="g3">
+        <div class="tcard fade-up"><div class="stars">★★★★★</div><p class="ttext">「清晨5點的班機司機提前10分鐘就到了，還幫忙搬行李。日月潭包車行程安排得非常好！」</p><div class="tauthor"><div class="tav"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80"/></div><div><div class="tname">陳大明</div><div class="tinfo">商務旅客・台北</div></div></div></div>
+        <div class="tcard fade-up"><div class="stars">★★★★★</div><p class="ttext">「班機延誤兩小時，司機一直耐心等待，完全沒加收費用！帶孩子去花蓮的包車行程也很棒！」</p><div class="tauthor"><div class="tav"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80"/></div><div><div class="tname">林小雯</div><div class="tinfo">家庭旅遊・新竹</div></div></div></div>
+        <div class="tcard fade-up"><div class="stars">★★★★★</div><p class="ttext">「公司長期合作，多次安排外國客戶接送，司機英語流利，車輛乾淨，客戶印象非常好！」</p><div class="tauthor"><div class="tav"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80"/></div><div><div class="tname">王建國</div><div class="tinfo">企業客戶・台北</div></div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="travel-tips">
+    <div class="inner">
+      <div class="section-head"><h2>🌟 旅遊小貼士</h2><p>大森旅遊為您整理最實用的台灣旅遊建議</p></div>
+      <div class="g2">
+        <div class="tip-card fade-up"><div class="tip-icon">🌧️</div><div><h4>台灣天氣攻略</h4><p>台灣四季如春但多雨，北部冬季濕冷，南部全年溫暖。建議攜帶輕便雨具，夏季東部颱風季提前確認行程。</p></div></div>
+        <div class="tip-card fade-up"><div class="tip-icon">🍜</div><div><h4>必嚐在地美食</h4><p>夜市小吃、鹹酥雞、牛肉麵、珍珠奶茶，每個城市都有獨特風味。包車時可請司機推薦在地隱藏版美食！</p></div></div>
+        <div class="tip-card fade-up"><div class="tip-icon">📱</div><div><h4>行前準備清單</h4><p>提前辦理台灣預付卡SIM、下載離線地圖、確認信用卡境外手續費，並在預約時提供準確航班號碼。</p></div></div>
+        <div class="tip-card fade-up"><div class="tip-icon">🗓️</div><div><h4>最佳旅遊季節</h4><p>10–12月秋高氣爽最舒適；3–5月春花盛開；夏季6–8月海灘活動最熱門；阿里山日出全年皆宜。</p></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="home-cta">
+    <h2>準備好出發了嗎？</h2>
+    <p>立即預約，首次預約享有 <strong>九折優惠</strong></p>
+    <div class="home-cta-btns">
+      <a class="btn-cta-w" href="#" onclick="go('contact');return false">✈ 立即預約</a>
+      <a class="btn-cta-g" href="#" onclick="go('services');return false">了解服務</a>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<div class="page" id="page-services">
+  <div class="page-header"><h1>✈ 接送服務</h1><p>機場接機、送機、包車，全方位滿足您的出行需求</p></div>
+  <div class="content">
+    <div class="label">為什麼選擇大森</div>
+    <h2 class="title">安心出行的最佳夥伴</h2>
+    <p class="sub" style="margin-bottom:24px">10年以上服務經驗，超過一萬次成功接送，99.8%準時率，24小時客服待命。</p>
+    <div class="g2">
+      <div class="why-card fade-up"><div class="why-icon">🛡️</div><div><h4>安全有保障</h4><p>司機嚴格背景審查、定期培訓，車輛定期保養，投保足額商業保險。</p></div></div>
+      <div class="why-card fade-up"><div class="why-icon">⏰</div><div><h4>準時率 99.8%</h4><p>即時掌握交通資訊，提前規劃路線，確保您不會錯過班機。</p></div></div>
+      <div class="why-card fade-up"><div class="why-icon">💬</div><div><h4>24小時客服</h4><p>全天候客服專線，無論何時遇到任何問題都能即時獲得協助。</p></div></div>
+      <div class="why-card fade-up"><div class="why-icon">💳</div><div><h4>透明計費</h4><p>預約即報價，無隱藏費用，讓您出行預算清晰可控。</p></div></div>
+    </div>
+    <div class="divider"></div>
+    <div class="label">服務項目</div>
+    <h2 class="title" style="margin-bottom:20px">六大服務，貼心為您</h2>
+    <div class="g3">
+      <div class="svc-card fade-up"><div class="svc-img"><img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600&q=80" alt="接機" loading="lazy"/></div><div class="svc-body"><div class="svc-icon">🛬</div><h3>機場接機</h3><p>班機落地即見司機舉牌等候，協助行李，即時追蹤航班，延誤不加收費用。</p><span class="svc-tag">即時航班追蹤</span></div></div>
+      <div class="svc-card fade-up"><div class="svc-img"><img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80" alt="送機" loading="lazy"/></div><div class="svc-body"><div class="svc-icon">🛫</div><h3>機場送機</h3><p>提前預約，司機準時到府協助行李，確保您有充裕時間辦理登機手續。</p><span class="svc-tag">準時保證</span></div></div>
+      <div class="svc-card fade-up"><div class="svc-img"><img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=600&q=80" alt="旅遊包車" loading="lazy"/></div><div class="svc-body"><div class="svc-icon">🗺️</div><h3>旅遊包車</h3><p>全台景點任您遊，專業司機兼導覽，彈性行程，讓旅程更輕鬆愉快。</p><span class="svc-tag">客製行程</span></div></div>
+      <div class="svc-card fade-up"><div class="svc-img"><img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600&q=80" alt="商務包車" loading="lazy"/></div><div class="svc-body"><div class="svc-icon">💼</div><h3>商務包車</h3><p>車內備有 Wi-Fi 與充電設備，讓商務人士在旅途中保持高效工作狀態。</p><span class="svc-tag">車內 Wi-Fi</span></div></div>
+      <div class="svc-card fade-up"><div class="svc-img"><img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80" alt="婚禮禮車" loading="lazy"/></div><div class="svc-body"><div class="svc-icon">💍</div><h3>婚禮禮車</h3><p>人生最重要的一天，豪華禮車精心裝飾，讓新人風光迎接幸福時刻。</p><span class="svc-tag">客製裝飾</span></div></div>
+      <div class="svc-card fade-up"><div class="svc-img"><img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=600&q=80" alt="夜間接送" loading="lazy"/></div><div class="svc-body"><div class="svc-icon">🌙</div><h3>夜間接送</h3><p>深夜班機不用擔心，大森旅遊24小時待命，安全送您到家。</p><span class="svc-tag">24H 全天候</span></div></div>
+    </div>
+    <div class="steps-wrap">
+      <h3>簡單 4 步驟，輕鬆出發</h3>
+      <div class="steps-g">
+        <div class="step-box"><div class="step-n">1</div><div class="step-i">📱</div><h4>線上或來電預約</h4><p>填寫表單或撥打電話，提供時間、地點及人數。</p></div>
+        <div class="step-box"><div class="step-n">2</div><div class="step-i">📩</div><h4>收到確認通知</h4><p>預約成功後收到確認信及司機聯絡資訊。</p></div>
+        <div class="step-box"><div class="step-n">3</div><div class="step-i">🚗</div><h4>司機準時到達</h4><p>司機提前抵達舉牌等候，協助搬運行李。</p></div>
+        <div class="step-box"><div class="step-n">4</div><div class="step-i">😊</div><h4>安心抵達目的地</h4><p>在輕鬆愉快的旅途中安全抵達，開啟美好旅程！</p></div>
+      </div>
+    </div>
+    <div class="cta-box"><h2>準備好出發了嗎？</h2><p>立即預約，首次預約享有 <strong>九折優惠</strong></p><div class="cta-btns"><a class="btn-cta-w" href="#" onclick="go('contact');return false">立即預約</a><a class="btn-cta-g" href="#" onclick="go('pricing');return false">查看收費方案</a></div></div>
+  </div>
+</div>
+
+<!-- DESTINATIONS -->
+<div class="page" id="page-destinations">
+  <div class="page-header"><h1>🗺 台灣旅遊景點</h1><p>搭乘大森包車，北中南東全台精選，帶您探索每一個令人驚豔的角落</p></div>
+  <div class="content">
+    <div class="region-head"><span class="rbadge">🏙 北台灣</span><h2>Taipei &amp; North</h2></div>
+    <div class="g3">
+      <div class="dest-card fade-up"><div class="dest-img"><img src="https://images.unsplash.com/photo-1470004914212-05527e49370b?w=700&q=80" alt="九份" loading="lazy"/><div class="dest-ov"></div><div class="dest-lbl"><span class="dest-tag">新北市</span><div class="dest-name">九份老街</div><div class="dest-sub">山城燈火・宮崎駿靈感之地</div></div></div><div class="dest-body"><p>懸掛在山城間的紅燈籠，斑駁石階小路，俯瞰基隆山與湛藍海灣，夜景如夢似幻，來台必訪。</p><div class="dest-kws"><span class="kw">老街風情</span><span class="kw">夜景必訪</span><span class="kw">芋圓</span></div></div></div>
+      <div class="dest-card fade-up"><div class="dest-img"><img src="https://images.unsplash.com/photo-1551634979-2b11f8c946fe?w=700&q=80" alt="台北101" loading="lazy"/><div class="dest-ov"></div><div class="dest-lbl"><span class="dest-tag">台北市</span><div class="dest-name">台北 101</div><div class="dest-sub">台灣地標・俯瞰大台北</div></div></div><div class="dest-body"><p>登頂觀景台將大台北盆地盡收眼底，夜晚璀璨奪目。周邊信義商圈購物美食一應俱全。</p><div class="dest-kws"><span class="kw">地標景點</span><span class="kw">觀景台</span><span class="kw">購物</span></div></div></div>
+      <div class="dest-card fade-up"><div class="dest-img"><img src="https://images.unsplash.com/photo-1593123726854-a1a5a4d6eede?w=700&q=80" alt="野柳" loading="lazy"/><div class="dest-ov"></div><div class="dest-lbl"><span class="dest-tag">新北市</span><div class="dest-name">野柳地質公園</div><div class="dest-sub">女王頭・大自然鬼斧神工</div></div></div><div class="dest-body"><p>聞名世界的女王頭岩石，是大自然千萬年雕琢的傑作，北海岸必訪奇景，適合親子同遊。</p><div class="dest-kws"><span class="kw">地質奇景</span><span class="kw">海岸風光</span><span class="kw">親子</span></div></div></div>
+    </div>
+    <div class="region-head"><span class="rbadge g">🏔 中台灣</span><h2>Taichung &amp; Central</h2></div>
+    <div class="g3">
+      <div class="dest-card fade-up"><div class="dest-img"><img src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=700&q=80" alt="日月潭" loading="lazy"/><div class="dest-ov"></div><div class="dest-lbl"><span class="dest-tag">南投縣</span><div class="dest-name">日月潭</div><div class="dest-sub">台灣最美麗的高山湖泊</div></div></div><div class="dest-body"><p>被群山環抱的碧藍湖泊，清晨薄霧裊繞如仙境，自行車環湖路線風景絕美，台灣旅遊必訪。</p><div class="dest-kws"><span class="kw">高山湖泊</span><span class="kw">環湖自行車</span><span class="kw">日出晨霧</span></div></div></div>
+      <div class="dest-card fade-up"><div class="dest-img"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=80" alt="清境" loading="lazy"/><div class="dest-ov"></div><div class="dest-lbl"><span class="dest-tag">南投縣</span><div class="dest-name">清境農場</div><div class="dest-sub">台灣小瑞士・高山綠地</div></div></div><div class="dest-body"><p>海拔1748公尺的高山農場，碧綠草原上牛羊悠閒漫步，山巒景致猶如置身歐洲阿爾卑斯山。</p><div class="dest-kws"><span class="kw">高山農場</span><span class="kw">綿羊秀</span><span class="kw">星空觀測</span></div></div></div>
+      <div class="dest-card fade-up"><div class="dest-img"><img src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=700&q=80" alt="阿里山" loading="lazy"/><div class="dest-ov"></div><div class="dest-lbl"><span class="dest-tag">嘉義縣</span><div class="dest-name">阿里山</div><div class="dest-sub">雲海日出・千年神木</div></div></div><div class="dest-body"><p>搭乘百年小火車穿越雲霧，觀賞壯麗日出雲海，漫步千年神木林，感受最純粹的山林之美。</p><div class="dest-kws"><span class="kw">日出雲海</span><span class="kw">森林小火車</span><span class="kw">千年神木</span></div></div></div>
+    </div>
+    <div class="region-head"><span class="rbadge o">🌴 南台灣</span><h2>Tainan &amp; South</h2></div>
+    <div class="g3">
+      <div class="dest-card fade-up"><div class="dest-img"><img src="https://images.unsplash.com/photo-1559827291-72ee739d0d9a?w=700&q=80" alt="台南" loading="lazy"/><div class="dest-ov"></div><div class="dest-lbl"><span class="dest-tag o">台南市</span><div class="dest-name">台南府城古蹟</div><div class="dest-sub">台灣最古老的城市</div></div></div><div class="dest-body"><p>赤崁樓、安平古堡、神農街，每一塊磚石訴說四百年歷史，府城小吃令人念念不忘。</p><div class="dest-kws"><span class="kw">歷史古蹟</span><span class="kw">府城小吃</span><span class="kw">老街文化</span></div></div></div>
+      <div class="dest-card fade-up"><div class="dest-img"><img src="https://images.unsplash.com/photo-1552084117-56a987666449?w=700&q=80" alt="高雄" loading="lazy"/><div class="dest-ov"></div><div class="dest-lbl"><span class="dest-tag o">高雄市</span><div class="dest-name">高雄港灣城市</div><div class="dest-sub">駁二藝術特區・愛河夜景</div></div></div><div class="dest-body"><p>駁二藝術特區、美麗島站彩色穹頂、六合夜市，現代與文化完美融合的港灣城市。</p><div class="dest-kws"><span class="kw">港灣夜景</span><span class="kw">藝術特區</span><span class="kw">六合夜市</span></div></div></div>
+      <div class="dest-card fade-up"><div class="dest-img"><img src="https://images.unsplash.com/photo-1500835556837-99ac94a94552?w=700&q=80" alt="墾丁" loading="lazy"/><div class="dest-ov"></div><div class="dest-lbl"><span class="dest-tag o">屏東縣</span><div class="dest-name">墾丁國家公園</div><div class="dest-sub">南灣碧海・熱帶海洋樂園</div></div></div><div class="dest-body"><p>台灣最南端的熱帶樂園，清澈湛藍海水、細白沙灘，各種水上活動讓人流連忘返。</p><div class="dest-kws"><span class="kw">熱帶海灘</span><span class="kw">水上活動</span><span class="kw">珊瑚礁</span></div></div></div>
+    </div>
+    <div class="region-head"><span class="rbadge t">🌊 東台灣</span><h2>Hualien &amp; East Coast</h2></div>
+    <div class="g3">
+      <div class="dest-card fade-up"><div class="dest-img"><img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=700&q=80" alt="太魯閣" loading="lazy"/><div class="dest-ov"></div><div class="dest-lbl"><span class="dest-tag t">花蓮縣</span><div class="dest-name">太魯閣國家公園</div><div class="dest-sub">大理石峽谷・世界奇景</div></div></div><div class="dest-body"><p>壯觀的大理石峽谷被立霧溪切割，湛藍溪水與垂直峭壁構成震撼人心的絕景，台灣必訪。</p><div class="dest-kws"><span class="kw">大理石峽谷</span><span class="kw">健行步道</span><span class="kw">燕子口</span></div></div></div>
+      <div class="dest-card fade-up"><div class="dest-img"><img src="https://images.unsplash.com/photo-1504214208698-ea446addcf07?w=700&q=80" alt="七星潭" loading="lazy"/><div class="dest-ov"></div><div class="dest-lbl"><span class="dest-tag t">花蓮縣</span><div class="dest-name">花蓮七星潭</div><div class="dest-sub">礫石海灣・太平洋藍</div></div></div><div class="dest-body"><p>弧形礫石海灣面向無邊太平洋，清晨薄霧中靜謐迷人，是攝影愛好者與旅人的天堂。</p><div class="dest-kws"><span class="kw">太平洋景觀</span><span class="kw">礫石海灘</span><span class="kw">攝影</span></div></div></div>
+      <div class="dest-card fade-up"><div class="dest-img"><img src="https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?w=700&q=80" alt="台東" loading="lazy"/><div class="dest-ov"></div><div class="dest-lbl"><span class="dest-tag t">台東縣</span><div class="dest-name">台東伯朗大道</div><div class="dest-sub">天堂之路・金針花海</div></div></div><div class="dest-body"><p>「天堂之路」兩側稻田一望無際，縱谷平原壯闊景色令人心曠神怡，夏季金針花海如夢境。</p><div class="dest-kws"><span class="kw">伯朗大道</span><span class="kw">金針花海</span><span class="kw">縱谷騎行</span></div></div></div>
+    </div>
+    <div class="cta-box"><h2>想去哪裡，大森帶您去！</h2><p>提供客製化旅遊包車，行程由您決定，專業司機帶您安全出發</p><div class="cta-btns"><a class="btn-cta-w" href="#" onclick="go('contact');return false">規劃我的旅程</a><a class="btn-cta-g" href="#" onclick="go('pricing');return false">查看包車價格</a></div></div>
+  </div>
+</div>
+
+<!-- FLEET -->
+<div class="page" id="page-fleet">
+  <div class="page-header"><h1>🚗 車隊介紹</h1><p>豪華車型任您選，從商務轎車到大型廂型車，舒適安全出行</p></div>
+  <div class="content">
+    <div class="g3" style="margin-bottom:36px">
+      <div class="fleet-card fade-up"><div class="fleet-img"><img src="https://images.unsplash.com/photo-1617469767055-d11b893a3fd2?w=600&q=80" alt="Alphard" loading="lazy"/><span class="fleet-badge">最受歡迎</span></div><div class="fleet-body"><h3>Toyota Alphard 豪華廂型</h3><p>最受歡迎的機場接送車型，寬敞舒適，適合家庭或小型商務團體。後排空間寬大，長途也不疲勞。</p><div class="fleet-specs"><span class="fspec"><b>👥</b> 1–6人</span><span class="fspec"><b>🧳</b> 4件行李</span><span class="fspec"><b>❄️</b> 冷暖氣</span></div></div></div>
+      <div class="fleet-card fade-up"><div class="fleet-img"><img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=600&q=80" alt="商務轎車" loading="lazy"/></div><div class="fleet-body"><h3>商務豪華轎車</h3><p>Mercedes-Benz E-Class 或同級車款，頂級乘坐體驗，備有 Wi-Fi 與充電設備，適合商務人士。</p><div class="fleet-specs"><span class="fspec"><b>👥</b> 1–3人</span><span class="fspec"><b>🧳</b> 2件行李</span><span class="fspec"><b>📶</b> Wi-Fi</span></div></div></div>
+      <div class="fleet-card fade-up"><div class="fleet-img"><img src="https://images.unsplash.com/photo-1570125909517-53cb21c89ff2?w=600&q=80" alt="大型巴士" loading="lazy"/></div><div class="fleet-body"><h3>大型旅遊巴士</h3><p>適合企業、旅遊團隊，可容納多人及大量行李，配備麥克風，完成舒適的長途旅遊接送。</p><div class="fleet-specs"><span class="fspec"><b>👥</b> 7–20人</span><span class="fspec"><b>🧳</b> 行李充足</span><span class="fspec"><b>🎤</b> 麥克風</span></div></div></div>
+    </div>
+    <div class="divider"></div>
+    <div class="label">服務機場</div>
+    <h2 class="title" style="margin-bottom:20px">全台主要機場，全程服務</h2>
+    <div style="max-width:600px">
+      <div class="ac"><div class="ac-l"><div class="iata">TPE</div><div><div class="an">桃園國際機場</div><div class="as">第一、二航廈均可服務</div></div></div><span class="ab">主要據點</span></div>
+      <div class="ac"><div class="ac-l"><div class="iata">TSA</div><div><div class="an">台北松山機場</div><div class="as">國內、國際線接送</div></div></div><span class="ab">可服務</span></div>
+      <div class="ac"><div class="ac-l"><div class="iata">RMQ</div><div><div class="an">台中清泉崗機場</div><div class="as">中台灣地區接送</div></div></div><span class="ab">可服務</span></div>
+      <div class="ac"><div class="ac-l"><div class="iata">KHH</div><div><div class="an">高雄國際機場</div><div class="as">南台灣地區接送</div></div></div><span class="ab">可服務</span></div>
+      <div class="ac"><div class="ac-l"><div class="iata">HUN</div><div><div class="an">花蓮機場</div><div class="as">東台灣地區接送</div></div></div><span class="ab">可服務</span></div>
+    </div>
+    <div class="cta-box"><h2>找不到適合的車型？</h2><p>聯絡我們，為您量身安排最適合的車輛</p><div class="cta-btns"><a class="btn-cta-w" href="#" onclick="go('contact');return false">聯絡我們</a></div></div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="page" id="page-pricing">
+  <div class="page-header"><h1>💰 收費方案</h1><p>透明計費，無隱藏費用。預約即報價，安心出發</p></div>
+  <div class="content">
+    <div class="price-grid">
+      <div class="pc-card fade-up"><p class="pt">基本方案</p><h3>機場單程接送</h3><div class="pa"><span class="pcu">NT$</span><span class="pnum">1,200</span><span class="punit">起</span></div><p class="pnote">依距離計算，以桃園機場為例</p><ul class="plist"><li>接機或送機（擇一）</li><li>最多 3 位乘客</li><li>最多 2 件行李</li><li>30 分鐘免費等待</li><li>即時航班追蹤</li></ul><button class="btn-sky-bdr" onclick="go('contact')">立即預約</button></div>
+      <div class="pc-card pop fade-up"><span class="pop-lbl">🌟 最受歡迎</span><p class="pt">來回優惠</p><h3>機場來回接送</h3><div class="pa"><span class="pcu">NT$</span><span class="pnum">2,200</span><span class="punit">起</span></div><p class="pnote">來回合計，享折扣優惠</p><ul class="plist"><li>接機 + 送機</li><li>最多 6 位乘客</li><li>最多 4 件行李</li><li>60 分鐘免費等待</li><li>即時航班追蹤</li><li>免費行李協助</li></ul><button class="btn-sky" onclick="go('contact')">立即預約</button></div>
+      <div class="pc-card fade-up"><p class="pt">旅遊包車</p><h3>客製化全日包車</h3><div class="pa"><span class="pcu">NT$</span><span class="pnum">3,500</span><span class="punit">起/天</span></div><p class="pnote">依行程與天數客製化報價</p><ul class="plist"><li>全日包車服務</li><li>最多 20 位乘客</li><li>行李不限件數</li><li>客製化旅遊行程</li><li>專業導覽司機</li><li>企業電子發票</li></ul><button class="btn-sky-bdr" onclick="go('contact')">詢問報價</button></div>
+    </div>
+    <div class="divider"></div>
+    <div class="label">客戶好評</div>
+    <h2 class="title" style="margin-bottom:20px">真實旅客回饋</h2>
+    <div class="g3">
+      <div class="tcard fade-up"><div class="stars">★★★★★</div><p class="ttext">「清晨5點的班機司機提前10分鐘就到了，還幫忙搬行李。日月潭包車行程也安排得非常好！」</p><div class="tauthor"><div class="tav"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" loading="lazy"/></div><div><div class="tname">陳大明</div><div class="tinfo">商務旅客・台北</div></div></div></div>
+      <div class="tcard fade-up"><div class="stars">★★★★★</div><p class="ttext">「班機延誤兩小時，司機一直耐心等待，完全沒加收費用！帶孩子去花蓮的包車行程也很棒！」</p><div class="tauthor"><div class="tav"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" loading="lazy"/></div><div><div class="tname">林小雯</div><div class="tinfo">家庭旅遊・新竹</div></div></div></div>
+      <div class="tcard fade-up"><div class="stars">★★★★★</div><p class="ttext">「公司長期合作夥伴，多次安排外國客戶接送，司機英語流利，車輛乾淨，客戶印象非常好！」</p><div class="tauthor"><div class="tav"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80" loading="lazy"/></div><div><div class="tname">王建國</div><div class="tinfo">企業客戶・台北</div></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="page" id="page-about">
+  <div class="page-header"><h1>🏢 關於我們</h1><p>10年專業，用心服務每一位旅客</p></div>
+  <div class="content">
+    <div class="story-grid">
+      <div class="story-img fade-up"><img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&q=80" alt="大森旅遊" loading="lazy"/></div>
+      <div class="story-text fade-up">
+        <div class="label">品牌故事</div>
+        <h2>從一台車開始的夢想</h2>
+        <p>大森旅遊成立於2015年，創辦人Jacky從一台二手廂型車出發，憑著對服務品質的堅持，一步步建立起今天擁有20輛豪華車隊的品牌。</p>
+        <p>我們相信，旅途的第一步——機場接送——就決定了旅程的品質。每一次接送，我們都當作最重要的任務去完成，讓旅客感受到台灣最溫暖的待客之道。</p>
+        <p>10年來，我們服務超過10,000位旅客，大森旅遊是您最可靠的出行夥伴。</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="label">品牌里程碑</div>
+    <h2 class="title" style="margin-bottom:28px">大森成長之路</h2>
+    <div class="timeline">
+      <div class="tl-item fade-up"><div class="tl-dot">2015</div><div class="tl-content"><div class="tl-year">創立元年</div><h4>大森旅遊正式成立</h4><p>創辦人Jacky以一台Toyota Alphard起家，從桃園機場接送服務開始，累積第一批忠實客戶。</p></div></div>
+      <div class="tl-item fade-up"><div class="tl-dot">2017</div><div class="tl-content"><div class="tl-year">業務擴展</div><h4>車隊擴增至5輛，開啟旅遊包車業務</h4><p>加入日月潭、阿里山等熱門景點包車路線，深受日韓旅客歡迎，口碑迅速擴散。</p></div></div>
+      <div class="tl-item fade-up"><div class="tl-dot">2019</div><div class="tl-content"><div class="tl-year">品質認證</div><h4>榮獲優質旅遊服務認證</h4><p>通過交通部觀光局旅遊服務品質認證，正式成為企業商務包車首選合作夥伴。</p></div></div>
+      <div class="tl-item fade-up"><div class="tl-dot">2021</div><div class="tl-content"><div class="tl-year">疫後重生</div><h4>開拓國內旅遊市場</h4><p>疫情期間轉型深耕國內旅遊市場，推出「環島包車」及「秘境探索」系列行程，深獲好評。</p></div></div>
+      <div class="tl-item fade-up"><div class="tl-dot">2025</div><div class="tl-content"><div class="tl-year">十週年</div><h4>車隊達20輛，服務超過10,000人次</h4><p>十週年之際，車隊擴展至20輛豪華車型，服務足跡遍及台灣全島，持續為每位旅客創造美好回憶。</p></div></div>
+    </div>
+    <div class="divider"></div>
+    <div class="label">核心理念</div>
+    <h2 class="title" style="margin-bottom:20px">我們的服務精神</h2>
+    <div class="g4">
+      <div class="val-card fade-up"><div class="val-icon">🛡️</div><h4>安全第一</h4><p>所有司機定期健康檢查與駕駛培訓，車輛定期送廠保養，您的安全是最高優先。</p></div>
+      <div class="val-card fade-up"><div class="val-icon">❤️</div><h4>用心服務</h4><p>把每位客人當家人，從預約到抵達，每個細節都親力親為，做到讓您感動。</p></div>
+      <div class="val-card fade-up"><div class="val-icon">🌏</div><h4>在地深根</h4><p>我們是台灣在地品牌，深耕在地文化，讓旅客體驗最道地、最真實的台灣。</p></div>
+      <div class="val-card fade-up"><div class="val-icon">🤝</div><h4>誠信透明</h4><p>報價即最終價，無隱藏費用。我們的信譽建立在每一次誠實的服務上。</p></div>
+    </div>
+    <div class="divider"></div>
+    <div class="label">服務團隊</div>
+    <h2 class="title" style="margin-bottom:20px">認識大森夥伴</h2>
+    <div class="g4">
+      <div class="team-card fade-up"><div class="team-av"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80" loading="lazy"/></div><h4>Jacky 陳</h4><div class="team-role">創辦人 / 首席司機</div><p>10年駕駛經驗，熟悉全台路況，英日語流利，是眾多外籍旅客的最愛。</p></div>
+      <div class="team-card fade-up"><div class="team-av"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80" loading="lazy"/></div><h4>Amy 林</h4><div class="team-role">客服總監</div><p>負責24小時客服與預約排班，用最快速度回應每一位客人的需求。</p></div>
+      <div class="team-card fade-up"><div class="team-av"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80" loading="lazy"/></div><h4>Kevin 王</h4><div class="team-role">資深旅遊顧問</div><p>專精客製化旅遊行程規劃，帶您發現台灣最美的秘境景點。</p></div>
+      <div class="team-card fade-up"><div class="team-av"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80" loading="lazy"/></div><h4>Mike 張</h4><div class="team-role">車隊維修長</div><p>確保每輛車隨時保持最佳狀態，讓每趟旅程都安全舒適無虞。</p></div>
+    </div>
+    <div class="cta-box"><h2>與我們一起出發</h2><p>加入超過10,000位信任大森旅遊的旅客行列</p><div class="cta-btns"><a class="btn-cta-w" href="#" onclick="go('contact');return false">立即預約</a><a class="btn-cta-g" href="#" onclick="go('services');return false">了解服務</a></div></div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="page" id="page-faq">
+  <div class="page-header"><h1>❓ 常見問題</h1><p>整理最常被問到的問題，希望能為您解惑</p></div>
+  <div class="content">
+    <span class="faq-cat">✈ 預約與訂單</span>
+    <div class="faq-list">
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">如何預約大森旅遊的服務？<span class="faq-arrow">▼</span></div><div class="faq-a">您可以透過以下三種方式預約：<br/>① 填寫網站上的預約表單（推薦）<br/>② 撥打服務專線 0912-345-678<br/>③ 發送 Email 至 jackkok1288@gmail.com<br/><br/>預約成功後，我們將在30分鐘內以電話或Email確認您的訂單。</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">需要提前多久預約？<span class="faq-arrow">▼</span></div><div class="faq-a">機場接送建議至少提前 24 小時預約。旅遊包車建議提前 3–7 天，讓我們有足夠時間規劃最佳行程。節假日旺季（農曆春節、暑假）建議提前 2 週以上。</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">可以臨時取消或更改預約嗎？<span class="faq-arrow">▼</span></div><div class="faq-a">• 出發前 24 小時以上取消：免費取消<br/>• 出發前 6–24 小時取消：收取 30% 取消費用<br/>• 出發前 6 小時內取消：收取 50% 取消費用<br/><br/>更改行程請盡早聯絡，我們將盡力配合調整。</div></div>
+    </div>
+    <span class="faq-cat">🚗 機場接送</span>
+    <div class="faq-list">
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">班機延誤會加收費用嗎？<span class="faq-arrow">▼</span></div><div class="faq-a">不會！大森旅遊提供即時航班追蹤服務，司機會依據您的實際落地時間調整到達時間。班機延誤不加收任何費用，請放心搭乘。</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">司機會在哪裡等我？<span class="faq-arrow">▼</span></div><div class="faq-a">司機將在入境大廳出口舉牌等候（牌上寫有您的姓名）。桃園機場第一航廈在入境大廳B出口，第二航廈在入境大廳A出口。確認落地後若有疑問，請直接撥打司機手機。</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">可以攜帶多少行李？<span class="faq-arrow">▼</span></div><div class="faq-a">依車型而定：<br/>• 商務轎車：2 件 26 吋行李箱<br/>• Toyota Alphard：4 件 26 吋行李箱<br/>• 大型巴士：行李量不受限制<br/><br/>如有大型行李或特殊物品（嬰兒推車、運動器材等），預約時請提前告知。</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">提供嬰兒安全座椅嗎？<span class="faq-arrow">▼</span></div><div class="faq-a">可以！預約時請告知需要嬰兒座椅或兒童增高墊，我們將免費提供（需提前告知，數量有限，先到先得）。</div></div>
+    </div>
+    <span class="faq-cat">🗺 旅遊包車</span>
+    <div class="faq-list">
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">包車行程可以自己決定嗎？<span class="faq-arrow">▼</span></div><div class="faq-a">完全可以！行程由您完全主導。您也可以告訴我們您的喜好，由旅遊顧問為您規劃最適合的行程，包含景點順序、用餐地點推薦等。</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">司機可以擔任導遊嗎？<span class="faq-arrow">▼</span></div><div class="faq-a">我們的資深司機都具備豐富的在地知識，可以介紹景點歷史、推薦在地美食。若有語言需求（英語、日語），請預約時告知，我們將安排適合的司機。</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">包車費用包含過路費和停車費嗎？<span class="faq-arrow">▼</span></div><div class="faq-a">包車費用包含司機費、油費和車輛費用。高速公路過路費和景點停車費由客人自行負擔。費用會在預約確認時完整說明，不會有任何隱藏費用。</div></div>
+    </div>
+    <span class="faq-cat">💳 付款方式</span>
+    <div class="faq-list">
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">支援哪些付款方式？<span class="faq-arrow">▼</span></div><div class="faq-a">我們接受多種付款方式：<br/>• 現金（新台幣）<br/>• 信用卡（VISA、Mastercard、JCB）<br/>• LINE Pay / Apple Pay<br/>• 銀行轉帳（企業客戶）<br/>• 企業可申請月結帳單</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">可以開立公司發票嗎？<span class="faq-arrow">▼</span></div><div class="faq-a">可以！我們可提供電子發票或三聯式統一發票。預約時請告知公司抬頭、統一編號，我們將在服務完成後開立發票。</div></div>
+    </div>
+    <div class="cta-box"><h2>還有其他問題？</h2><p>歡迎隨時聯絡我們，客服團隊24小時為您服務</p><div class="cta-btns"><a class="btn-cta-w" href="#" onclick="go('contact');return false">聯絡我們</a><a class="btn-cta-g" href="tel:+886912345678">📞 直接來電</a></div></div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="page" id="page-contact">
+  <div class="page-header"><h1>📞 聯絡預約</h1><p>隨時為您服務，歡迎填寫表單或直接來電</p></div>
+  <div class="content">
+    <div class="contact-wrap">
+      <div>
+        <div class="label">聯絡資訊</div>
+        <h2 class="title">隨時為您<br/>提供服務</h2>
+        <p class="sub" style="margin-bottom:20px">機場接送或旅遊包車，客服團隊全天候待命，歡迎隨時聯繫。</p>
+        <div class="ci-list">
+          <div class="ci-item"><div class="ci-icon">📧</div><div><h4>電子郵件</h4><p><a href="mailto:jackkok1288@gmail.com">jackkok1288@gmail.com</a></p></div></div>
+          <div class="ci-item"><div class="ci-icon">📞</div><div><h4>服務專線</h4><p><a href="tel:+886912345678" style="color:var(--sky1)">0912-345-678</a></p><p style="font-size:.75rem;color:var(--text3);margin-top:2px">24小時全年無休</p></div></div>
+          <div class="ci-item"><div class="ci-icon">💬</div><div><h4>LINE 官方帳號</h4><p>@dasenmobility</p></div></div>
+          <div class="ci-item"><div class="ci-icon">🗺️</div><div><h4>服務地區</h4><p>台灣全區域，離島亦可安排</p></div></div>
+          <div class="ci-item"><div class="ci-icon">⏰</div><div><h4>服務時間</h4><p>全年 365 天，24 小時不間斷</p></div></div>
+        </div>
+      </div>
+      <div class="form-box">
+        <h3>✈ 立即預約接送 / 包車</h3>
+        <div class="fr">
+          <div class="fg"><label>姓名 *</label><input type="text" placeholder="您的姓名"/></div>
+          <div class="fg"><label>聯絡電話 *</label><input type="tel" placeholder="0912-000-000"/></div>
+        </div>
+        <div class="fg"><label>電子郵件</label><input type="email" placeholder="your@email.com"/></div>
+        <div class="fr">
+          <div class="fg"><label>服務類型 *</label><select><option value="">請選擇</option><option>機場接機</option><option>機場送機</option><option>機場來回</option><option>旅遊包車</option><option>商務包車</option><option>婚禮禮車</option></select></div>
+          <div class="fg"><label>乘客人數 *</label><select><option>1–2人</option><option>3–4人</option><option>5–6人</option><option>7人以上</option></select></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label>日期 *</label><input type="date"/></div>
+          <div class="fg"><label>時間 *</label><input type="time"/></div>
+        </div>
+        <div class="fg"><label>航班號碼 / 旅遊目的地</label><input type="text" placeholder="例：BR 215 / 日月潭、花蓮太魯閣"/></div>
+        <div class="fg"><label>備註說明</label><textarea placeholder="特殊需求、行李數量、嬰兒座椅、旅遊行程規劃等..."></textarea></div>
+        <button class="btn-sky" style="padding:13px;font-size:.92rem" onclick="alert('感謝您的預約！\n我們將在30分鐘內與您聯繫確認。\n\n如有緊急需求請直撥：0912-345-678')">送出預約申請</button>
+        <p style="color:var(--text3);font-size:.76rem;text-align:center;margin-top:9px">我們將於 30 分鐘內以電話或 Email 確認您的預約</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="f-logo"><div class="logo-box">✈</div>大森旅遊</div>
+      <p>台灣頂級機場接送與旅遊包車品牌。10年服務，超過一萬次安心接送，讓每段旅程都從容美好。</p>
+      <div class="social-links">
+        <div class="social-btn">📘</div>
+        <div class="social-btn">📷</div>
+        <div class="social-btn">💬</div>
+        <div class="social-btn">▶️</div>
+      </div>
+    </div>
+    <div class="footer-col"><h4>服務項目</h4><ul><li onclick="go('services')">機場接機</li><li onclick="go('services')">機場送機</li><li onclick="go('services')">旅遊包車</li><li onclick="go('services')">商務包車</li><li onclick="go('services')">婚禮禮車</li></ul></div>
+    <div class="footer-col"><h4>探索台灣</h4><ul><li onclick="go('destinations')">北台灣景點</li><li onclick="go('destinations')">中台灣景點</li><li onclick="go('destinations')">南台灣景點</li><li onclick="go('destinations')">東台灣景點</li></ul></div>
+    <div class="footer-col"><h4>快速連結</h4><ul><li onclick="go('about')">關於我們</li><li onclick="go('faq')">常見問題</li><li onclick="go('fleet')">車隊介紹</li><li onclick="go('pricing')">收費方案</li><li onclick="go('contact')">立即預約</li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 大森旅遊 Da Sen Tourism. All rights reserved. ｜ 📧 jackkok1288@gmail.com ｜ 📞 0912-345-678</p></div>
+</footer>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav">
+  <div class="mn">
+    <button class="mnb active" onclick="go('home')"><span>🏠</span>首頁</button>
+    <button class="mnb" onclick="go('services')"><span>✈</span>接送</button>
+    <button class="mnb" onclick="go('destinations')"><span>🗺</span>景點</button>
+    <button class="mnb" onclick="go('fleet')"><span>🚗</span>車隊</button>
+    <button class="mnb" onclick="go('pricing')"><span>💰</span>方案</button>
+    <button class="mnb" onclick="go('about')"><span>🏢</span>關於</button>
+    <button class="mnb" onclick="go('faq')"><span>❓</span>FAQ</button>
+    <button class="mnb" onclick="go('contact')"><span>📞</span>預約</button>
+  </div>
+</div>
+
+<script>
+const ORDER=['home','services','destinations','fleet','pricing','about','faq','contact'];
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  const i=ORDER.indexOf(id);
+  document.querySelectorAll('.nav-tab').forEach((t,j)=>t.classList.toggle('active',j===i));
+  document.querySelectorAll('.mnb').forEach((b,j)=>b.classList.toggle('active',j===i));
+  setTimeout(observeFadeUps,50);
+}
+function toggleFaq(el){
+  const isOpen=el.classList.contains('open');
+  document.querySelectorAll('.faq-q.open').forEach(q=>{q.classList.remove('open');q.nextElementSibling.classList.remove('open')});
+  if(!isOpen){el.classList.add('open');el.nextElementSibling.classList.add('open')}
+}
+function observeFadeUps(){
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}});
+  },{threshold:.1});
+  document.querySelectorAll('.page.active .fade-up:not(.visible)').forEach(el=>io.observe(el));
+}
+window.addEventListener('load',observeFadeUps);
+</script>
+</body>
+</html>
